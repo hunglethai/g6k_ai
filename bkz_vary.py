@@ -71,7 +71,7 @@ g6k = Siever(A_copy)
 # BKZ parameters for pump and jump
 block_size = 20
 extra_dim4free = 0
-jump = [5,7, 9, 11,13,15]
+jumps = [5,7, 9, 11,13,15]
 trials = 1
 quality_results = []
 
@@ -101,7 +101,7 @@ for jump, quality in quality_results:
         
 # Example BKZ pump and jump
 for _ in range(trials):
-    pump_n_jump_bkz_tour(g6k, dummy_tracer,blocksize=block_size, jump = jump[0], dim4free_fun= default_dim4free_fun(block_size), extra_dim4free=0,
+    pump_n_jump_bkz_tour(g6k, dummy_tracer,blocksize=block_size, jump = jumps[0], dim4free_fun= default_dim4free_fun(block_size), extra_dim4free=0,
                          pump_params=None, goal_r0=0., verbose=False)
 M = GSO.Mat(A_copy)
 M.update_gso()
@@ -116,7 +116,7 @@ axs[1, 1].set_xlabel('Vector Index')
 axs[1, 1].set_ylabel('Log Norm of BKZpnj Vectors')
 quality = basis_quality(M)
 quality_str = ', '.join(f"{key}: {value:.4f}" for key, value in quality.items())
-axs[1, 1].set_title('Log Norms of Consecutive BKZpnj Vectors block size of '+str(block_size) + ' and jump = ' +str(jump[0])+f'\nBasis Quality: {quality_str}' )
+axs[1, 1].set_title('Log Norms of Consecutive BKZpnj Vectors block size of '+str(block_size) + ' and jump = ' +str(jumps[0])+f'\nBasis Quality: {quality_str}' )
 axs[1, 1].grid(True)
 
 # Leave subplot 4 empty or add another plot/info
