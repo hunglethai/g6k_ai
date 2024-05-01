@@ -86,8 +86,7 @@ for idx, jump in enumerate(jumps):
                          pump_params=None, goal_r0=0., verbose=False)
 
     M.update_gso()
-    norms = [M.get_r(i, i) for i in range(dimension)]
-    norms = np.log2(np.sqrt(norms))
+    quality = basis_quality(M)
 
     # Store quality results
     quality_results.append((jump, quality))
