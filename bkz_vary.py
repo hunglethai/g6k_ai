@@ -77,10 +77,9 @@ quality_results = []
 
 # Run BKZ pump and jump for different jump values
 for idx, jump in enumerate(jumps):
-    A = A_copy.copy()
-    M = GSO.Mat(A)
+    M = GSO.Mat(A_copy)
     M.update_gso()
-    g6k = Siever(M)
+    g6k = Siever(A_copy)
 
     for _ in range(trials):
         pump_n_jump_bkz_tour(g6k, dummy_tracer, blocksize=block_size, jump=jump, extra_dim4free=extra_dim4free)
