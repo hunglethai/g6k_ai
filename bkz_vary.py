@@ -5,6 +5,7 @@ from fpylll.tools.bkz_stats import dummy_tracer
 from fpylll.tools.quality import basis_quality
 import numpy as np
 import matplotlib.pyplot as plt
+import pandas as pd
 
 # Set up a 2x2 subplot grid
 fig, axs = plt.subplots(2, 2, figsize=(5, 5))  # Adjust size as needed
@@ -71,7 +72,7 @@ g6k = Siever(A_copy)
 # BKZ parameters for pump and jump
 block_size = 20
 extra_dim4free = 0
-jumps = [5,7, 9, 11,13,15]
+jumps = range(1,dimension,2)
 trials = 1
 quality_results = []
 
@@ -91,12 +92,14 @@ for idx, jump in enumerate(jumps):
     # Store quality results
     quality_results.append((jump, quality))
     
-# Optionally, print quality results as a table
-print("Quality Results by Jump Value:")
-for jump, quality in quality_results:
-    print(f"Jump {jump}:")
-    for key, value in quality.items():
-        print(f"  {key}: {value:.4f}")
+# Print quality results as a table
+df = pd.DataFrame([
+    {'Jump': jump, **quality}
+    for jump, quality in quality_results
+])
+
+# Display the DataFrame
+print(df.to_string(index=False))
         
 # Example BKZ pump and jump
 for _ in range(trials):
