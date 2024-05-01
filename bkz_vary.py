@@ -82,7 +82,8 @@ for idx, jump in enumerate(jumps):
     g6k = Siever(A_copy)
 
     for _ in range(trials):
-        pump_n_jump_bkz_tour(g6k, dummy_tracer, blocksize=block_size, jump=jump, extra_dim4free=extra_dim4free)
+        pump_n_jump_bkz_tour(g6k, dummy_tracer,blocksize=block_size, jump = jump, dim4free_fun= default_dim4free_fun(block_size), extra_dim4free=0,
+                         pump_params=None, goal_r0=0., verbose=False)
 
     M.update_gso()
     norms = [M.get_r(i, i) for i in range(dimension)]
