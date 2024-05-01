@@ -71,7 +71,7 @@ g6k = Siever(A_copy)
 # BKZ parameters for pump and jump
 block_size = 20
 extra_dim4free = 0
-jump = [5,10,15]
+jump = [5,7, 9, 11,13,15]
 trials = 1
 quality_results = []
 
