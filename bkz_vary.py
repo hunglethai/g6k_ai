@@ -13,7 +13,7 @@ fig, axs = plt.subplots(2, 2, figsize=(5, 5))  # Adjust size as needed
 
 
 # Define the dimension of the lattice and the bit size for the integer matrix
-dimension = 80
+dimension = 100
 bits = 8
 
 # Create a random matrix as a basis for the lattice
@@ -48,7 +48,7 @@ trials = 1  # Number of trials or tours to run
 
 # Running the naive BKZ tour
 for _ in range(trials):
-    naive_bkz_tour(g6k, dummy_tracer, blocksize=block_size_bkz, extra_dim4free=extra_dim4free)
+    naive_bkz_tour(g6k, dummy_tracer, blocksize=block_size_bkz, dim4free_fun= default_dim4free_fun, extra_dim4free=extra_dim4free)
 
 tracer = SieveTreeTracer(g6k, root_label=("bkz", dimension), start_clocks=True)
 stat = tracer.trace
@@ -87,7 +87,7 @@ for idx, block_size in enumerate(block_sizes):
         # print(A==A_copy)
 
         for _ in range(trials):
-            pump_n_jump_bkz_tour(g6k, dummy_tracer,blocksize=block_size, jump = jump, dim4free_fun= default_dim4free_fun(block_size), extra_dim4free=0,
+            pump_n_jump_bkz_tour(g6k, dummy_tracer,blocksize=block_size, jump = jump, dim4free_fun= default_dim4free_fun, extra_dim4free=0,
                             pump_params=None, goal_r0=0., verbose=False)
 
         M = GSO.Mat(A)
@@ -108,10 +108,11 @@ print(df.to_string(index=False))
 
 # EXAMPLE OF A BKZ PNJ
 # Example BKZ pump and jump
+dim4free_fun = int(11.5 + 0.075*block_size)
 A = A_copy
 g6k = Siever(A)
 for _ in range(trials):
-    pump_n_jump_bkz_tour(g6k, dummy_tracer,blocksize=block_sizes[0], jump = jumps[0], dim4free_fun= default_dim4free_fun(block_size), extra_dim4free=0,
+    pump_n_jump_bkz_tour(g6k, dummy_tracer,blocksize=block_sizes[0], jump = jumps[0], dim4free_fun= default_dim4free_fun, extra_dim4free=0,
                          pump_params=None, goal_r0=0., verbose=False)
 M = GSO.Mat(A)
 M.update_gso()
