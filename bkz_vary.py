@@ -1,4 +1,4 @@
-from fpylll import IntegerMatrix, GSO
+from fpylll import *
 from g6k import *
 from g6k.algorithms.bkz import *
 from fpylll.tools.bkz_stats import dummy_tracer
@@ -7,16 +7,18 @@ from fpylll.tools.quality import basis_quality
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
+from tqdm import tqdm
 
 # Set up a 2x2 subplot grid
 fig, axs = plt.subplots(2, 2, figsize=(5, 5))  # Adjust size as needed
 
 
 # Define the dimension of the lattice and the bit size for the integer matrix
-dimension = 100
+dimension = 80
 bits = 8
 
 # Create a random matrix as a basis for the lattice
+FPLLL.set_random_seed(1337)
 A = IntegerMatrix.random(dimension, "qary", bits=bits, k = dimension//2)
 A_copy = A
 
@@ -80,7 +82,7 @@ trials = 1
 quality_results = []
 
 # Run BKZ pump and jump for different jump values
-for idx, block_size in enumerate(block_sizes):
+for idx, block_size in tqdm(enumerate(block_sizes),ncols = 100):
     for jump in jumps:
         A = A_copy
         g6k = Siever(A)
