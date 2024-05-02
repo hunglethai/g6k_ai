@@ -19,7 +19,8 @@ bits = 8
 A = IntegerMatrix.random(dimension, "qary", bits=bits, k = dimension//2)
 A_copy = A
 
-# Initialize the GSO object with the basis matrix, with UinvT enabled
+# GSO ORIGINAL BASIS
+# Initialize the GSO object with the basis matrix
 M = GSO.Mat(A)
 M.update_gso()
 
@@ -35,6 +36,7 @@ quality_str = ', '.join(f"{key}: {value:.2f}" for key, value in quality.items())
 axs[0, 0].set_title(f'Log Norms of Consecutive GSO Vectors \nBasis Quality: {quality_str}')
 axs[0, 0].grid(True)
 
+# NAIVE BKZ ALGORITHM
 # Create a Siever object using the GSO matrix
 g6k = Siever(A)
 
@@ -63,24 +65,27 @@ axs[0, 1].set_title('Log Norms of Consecutive naive BKZ Vectors block size of '+
 axs[0, 1].grid(True)
 
 # BKZ pump and jump
-M = GSO.Mat(A_copy)
+A =  A_copy
+M = GSO.Mat(A)
 M.update_gso()
 
 # Initialize the Siever
-g6k = Siever(A_copy)
+g6k = Siever(A)
 
 # BKZ parameters for pump and jump
 block_size = 20
 extra_dim4free = 0
-jumps = range(1,dimension,2)
+jumps = range(5,dimension,2) # Test jump = 5 up to the dimension
 trials = 1
 quality_results = []
 
+# BKZ PNJ FOR DIFFERENT JUMP
 # Run BKZ pump and jump for different jump values
 for idx, jump in enumerate(jumps):
-    M = GSO.Mat(A_copy)
+    A = A_copy
+    M = GSO.Mat(A)
     M.update_gso()
-    g6k = Siever(A_copy)
+    g6k = Siever(A)
 
     for _ in range(trials):
         pump_n_jump_bkz_tour(g6k, dummy_tracer,blocksize=block_size, jump = jump, dim4free_fun= default_dim4free_fun(block_size), extra_dim4free=0,
@@ -100,12 +105,15 @@ df = pd.DataFrame([
 
 # Display the DataFrame
 print(df.to_string(index=False))
-        
+
+# EXAMPLE OF A BKZ PNJ
 # Example BKZ pump and jump
+A = A_copy
+g6k = Siever(A)
 for _ in range(trials):
     pump_n_jump_bkz_tour(g6k, dummy_tracer,blocksize=block_size, jump = jumps[0], dim4free_fun= default_dim4free_fun(block_size), extra_dim4free=0,
                          pump_params=None, goal_r0=0., verbose=False)
-M = GSO.Mat(A_copy)
+M = GSO.Mat(A)
 M.update_gso()
 
 # Extract the squared Norms of the BKZ vectors
